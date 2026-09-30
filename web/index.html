@@ -1,0 +1,323 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>投资监控雷达</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><circle cx='16' cy='16' r='15' fill='%230f766e'/><circle cx='16' cy='16' r='9' fill='none' stroke='white' stroke-width='2'/><circle cx='16' cy='16' r='3' fill='white'/></svg>">
+<link rel="stylesheet" href="/style.css?v=__ASSET_V__">
+</head>
+<body>
+<main>
+  <header>
+    <div>
+      <span class="eyebrow">INVESTMENT RADAR · BETA</span>
+      <h1>可配置投资监控与风险雷达</h1>
+      <p>把自然语言关注点，变成可以长期运行、解释每次结果的监控任务。</p>
+    </div>
+    <span id="dataBadge" class="badge">连接中…</span>
+  </header>
+
+  <section id="healthBanner" class="health-banner">正在检查数据服务状态…</section>
+
+  <section class="summary">
+    <div><b id="sumTotal">0</b><span>全部任务</span></div>
+    <div><b id="sumActive">0</b><span>运行中</span></div>
+    <div><b id="sumPaused">0</b><span>已暂停</span></div>
+    <div><b id="sumArchived">0</b><span>已归档</span></div>
+    <div><b id="sumTriggered">0</b><span>最近触发</span></div>
+    <div><b id="sumIssues">0</b><span>异常记录</span></div>
+  </section>
+
+  <details class="guide" open>
+    <summary class="guide-title">产品说明书<span class="guide-tip">点击标题可折叠</span></summary>
+
+    <details class="guide-block" open>
+      <summary>使用操作指南</summary>
+      <div class="guide-block-body">
+        <div class="steps">
+          <div><b>01 输入关注点</b><span>用一句话说出你关注什么，价格、热度、事件或日历条件。例如「茅台跌破 1400 提醒我」。</span></div>
+          <div><b>02 检查并确认</b><span>系统生成规则草案，你可以修改类型、标的、阈值和频率</span></div>
+          <div><b>03 查看结果</b><span>每次检查都会说明触发、未触发、降级或未执行的原因</span></div>
+        </div>
+        <ul class="guide-list">
+          <li>草案不会自动执行：点击「确认并创建任务」，规则才会入库并按间隔开始检查。</li>
+          <li>创建后可用任务卡上的「立即检查」手动跑一次，用来验证规则是否符合预期。</li>
+          <li>修改规则会生成新版本（v2、v3…），冷却与去重计数随之重置，历史记录仍按旧版本保留。</li>
+          <li>每条检查记录都可审计：保留判定依据、数据时点、数据来源与执行状态。</li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="guide-block">
+      <summary>逻辑规则</summary>
+      <div class="guide-block-body">
+        <table class="guide-table">
+          <thead><tr><th>条件类型</th><th>可选判断</th><th>判定方式</th><th>默认频率 / 冷却</th></tr></thead>
+          <tbody>
+            <tr><td>价格</td><td>高于 / 低于</td><td>严格比较，价格等于阈值不算满足</td><td>5 分钟 / 60 分钟</td></tr>
+            <tr><td>热度</td><td>进入热股榜前 N 名</td><td>N 取 1–100；不在榜内即判未满足</td><td>15 分钟 / 240 分钟</td></tr>
+            <tr><td>事件</td><td>异动关键词命中</td><td>匹配该标的的异动标签与关键词字段，关键词 1–20 字</td><td>15 分钟 / 240 分钟</td></tr>
+            <tr><td>日历</td><td>今日是 / 非交易日</td><td>与交易日历直接比对，不依赖行情数据</td><td>60 分钟 / 720 分钟</td></tr>
+          </tbody>
+        </table>
+        <p><b>状态口径</b>：「待检查」 → 「已触发 / 未触发 / 冷却中 / 已去重 / 已降级 / 检查失败 / 数据受限 / 数据存在冲突 / 未执行」。</p>
+        <p><b>去重与冷却</b>：同一任务、同一规则版本、同一交易日且条件持续成立时，只提醒一次。冷却期内记为「冷却中」，冷却结束后同一天记为「已去重」；条件解除或进入下一交易日可重新触发。</p>
+        <p><b>组合条件（AND / OR）</b>：用「并且 / 且 / 同时 / and」或「或者 / 或 / or」连接多个子条件，即可创建组合规则。判定时<b>每个子条件独立求值</b>，再按逻辑合并：AND 需要全部满足，OR 只需一个满足。任一子条件数据不可用或数据时点不可确认时，整体记为<b>已降级且不强行判定</b>。后写的子条件可以省略标的，会自动继承前一个子条件的标的。同一条规则暂不支持混用 AND 与 OR。</p>
+        <p><b>任务归档</b>：任务可以暂停（保留在列表、随时恢复）或归档（收进归档区、不再调度）。归档<b>不删除</b>任何东西——版本历史、检查记录、判定证据全部保留，随时可以「恢复启用」。本产品不提供永久删除。</p>
+        <p><b>参数边界</b>：检查间隔 1–1440 分钟；冷却 0–10080 分钟；热榜名次 1–100；事件关键词 1–20 字符。</p>
+      </div>
+    </details>
+
+    <details class="guide-block">
+      <summary>指标口径说明</summary>
+      <div class="guide-block-body">
+        <p><b>Q1：数据从哪来？</b></p>
+        <p>全部来自扶摇金融数据 API（当前 <code>source=fuyao</code>）。每条记录保留 <code>request_id</code>，可回溯到原始调用。</p>
+
+        <p><b>Q2：每条记录你能看到什么？</b></p>
+        <ul class="guide-list">
+          <li>来源（<code>source</code>）</li>
+          <li>字段（价格类 <code>priceField=last_price</code>；热度类 <code>rank</code> / <code>heat</code>）</li>
+          <li>值（如 <code>1258.62</code>）</li>
+          <li>单位（<code>unit</code>，如 <code>CNY/share</code>）</li>
+          <li>数据时点（<code>as_of</code>，并标注取法 <code>as_of_source</code>）</li>
+          <li>口径（<code>sessionLabel</code>，如「非交易时段，价格口径为最近交易日收盘附近快照」）</li>
+          <li>请求编号（<code>request_id</code>）</li>
+        </ul>
+
+        <p><b>Q3：不同条件的数据时点怎么取？</b></p>
+        <table class="guide-table">
+          <thead><tr><th>条件</th><th>接口 / 数据集</th><th>关键字段</th><th><code>as_of</code> 取法</th></tr></thead>
+          <tbody>
+            <tr><td>价格</td><td><code>prices/snapshot</code><br>+ <code>prices/historical</code></td><td><code>last_price</code>（元/股）</td><td>日线最后一根 K 线日期（<code>kline_date</code>）</td></tr>
+            <tr><td>热度</td><td><code>special-data/hot-stock-list</code></td><td><code>rank</code> / <code>heat</code></td><td>数据源未提供榜单业务时点（<code>fetch_time</code>：仅有本次获取时间）</td></tr>
+            <tr><td>事件</td><td><code>special-data/anomaly-analysis-list</code></td><td><code>tag_name</code> / <code>keyword_list</code></td><td>接口 <code>timestamp</code>（官方口径为抓取时刻，仅作参考）</td></tr>
+            <tr><td>日历</td><td><code>calendar/trading-days</code></td><td><code>date</code></td><td>当日（<code>trading_calendar</code>）</td></tr>
+          </tbody>
+        </table>
+        <p><b>为什么不用接口 timestamp 当行情时点</b>：实测该字段是<b>抓取时刻</b>而非行情时点，直接当作行情时间会误导判断。因此价格类的数据时点一律取日线日期，界面单独标注 <code>marketDate</code>。</p>
+        <p><b>热度数据时点（三态）</b>：① 数据源提供榜单业务时点 → 判定并写明是哪个时点的榜单；② 只有本次获取时间（当前真实情形）→ 仍给判定，但必须同时写明「榜单业务时间：数据源未提供」与可信度提示；③ 两者都拿不到 → 记为<b>数据受限</b>（<code>DATA_RESTRICTED</code>），<b>声明本次未执行条件判断，绝不出「未触发」</b>。</p>
+        <p><b>Q4：数据出问题怎么办？</b></p>
+        <p><b>降级口径</b>：<code>DATA_STALE</code> 日线最后日期落后于最近应完成交易日（盘中按上一交易日、收盘后按最近交易日）；<code>DATA_NOT_READY</code> 榜单或异动列表返回空。数据不可用时一律记为「已降级 / 检查失败」，<b>绝不折算为「未触发」</b>。</p>
+        <p><b>数据冲突（多源业务时点不一致）</b>：价格条件同时依赖两份数据——实时快照（<code>last_price</code>）与历史日线（最新收盘 <code>close</code>）。两份数据的业务时点必须能归入同一条时间线（盘中：快照 = 今日盘中、日线 = 上一交易日；非盘中：两者同为最近收盘日）。一旦归不进同一条时间线，系统<b>不挑其中一份顺手的来用</b>，而是记为「数据存在冲突」（<code>DATA_CONFLICT</code>）并声明本次未执行判定——挑一份用等于拿一半的数据编一个完整结论。判据是<b>时点不自洽</b>，不是数值不一致：盘中快照 1398 元、昨收 1412 元完全正常，把数值差异当冲突会让系统天天报警。</p>
+        <p class="meta">复现用的演示场景：快照业务时点 2026-09-29 14:55（价格 1398.00 元）、日线最新收盘 2026-09-30（收盘 1412.00 元），两份数据所属时点不同 → 状态「数据存在冲突」、结果「本次未执行条件判断」、原因「实时快照与日线数据所属时点不同」、建议「等待下一次检查或手动重试」。该场景由 <code>test/conflict.test.js</code> 固化为可重复执行的用例。</p>
+        <p><b>非交易日</b>：价格 / 热度 / 事件类记「未执行」，不计为失败；日历类正常判定；组合条件只要含盘中数据子条件，同样按非交易日跳过。</p>
+        <div class="guide-note">
+          <b>口径边界（如实说明）</b>
+          <p>以下两项已预留状态码，当前版本尚未实际触发：</p>
+          <ul class="guide-list">
+            <li>盘中数据无更新（<code>DATA_STATIC</code>）：未在真实盘中验证。</li>
+            <li>数据格式异常（<code>SCHEMA_MISMATCH</code>）：当前用「字段缺失」（<code>FIELD_MISSING</code>）口径代替。</li>
+          </ul>
+          <p><code>DATA_RESTRICTED</code>（数据受限）与热度三态中的「有榜单业务时点」分支已实现并有单元测试覆盖，但<b>当前数据源不提供榜单业务时点</b>，因此线上真实运行固定落在第 ② 种（只有获取时间）。第 ③ 种是有意保留的防御分支。</p>
+        </div>
+      </div>
+    </details>
+  </details>
+
+  <section class="hero">
+    <div class="input-panel">
+      <label for="intent">用自然语言描述你的监控条件</label>
+      <textarea id="intent" placeholder="例如：当 600519.SH 高于 1500 元时提醒我"></textarea>
+      <div class="examples">
+        <span>试试：</span>
+        <button class="example" data-text="当 600519.SH 高于 1500 元时提醒我">价格突破</button>
+        <button class="example" data-text="茅台跌破1400">价格跌破</button>
+        <button class="example" data-text="贵州茅台进入热榜前十">热榜排名</button>
+        <button class="example" data-text="茅台出现跌停异动时提醒我">异动事件</button>
+        <button class="example" data-text="提醒我今天是不是交易日">交易日历</button>
+        <button class="example" data-text="茅台跌破1400并且进入热榜前10">组合条件</button>
+      </div>
+      <div class="actions"><button id="parse">生成规则草案</button><span id="parseNote"></span></div>
+    </div>
+
+    <div id="draft" class="card hidden">
+      <div class="card-heading"><b>规则草案</b><span>确认前仍可修改</span></div>
+      <p class="hint">已接通四类条件：价格、热度、事件、日历；用「并且 / 或者」连接多个条件即为组合规则，下面会展开每个子条件。</p>
+      <div class="grid">
+        <label>条件类型
+          <select id="kind">
+            <option value="price">价格：高于 / 低于某价位</option>
+            <option value="heat">热度：进入热股榜前 N 名</option>
+            <option value="event">事件：个股异动关键词命中</option>
+            <option value="calendar">日历：今日是 / 非交易日</option>
+            <option value="composite">组合：多个条件按 AND / OR 合并</option>
+          </select>
+        </label>
+        <label id="symbolField">证券代码<input id="symbol" placeholder="600519.SH"></label>
+        <label id="operatorField">条件<select id="operator"></select></label>
+        <label id="thresholdField">阈值<input id="threshold" placeholder="1500"></label>
+        <label>检查间隔（分钟）<input id="interval" type="number" min="1" value="5"></label>
+        <label>冷却时间（分钟）<input id="cooldown" type="number" min="0" value="60"></label>
+      </div>
+      <div id="compositeEditor" class="composite hidden">
+        <div class="composite-head">
+          <label>组合逻辑
+            <select id="comboLogic">
+              <option value="AND">同时满足（并且 / AND）</option>
+              <option value="OR">任一满足（或者 / OR）</option>
+            </select>
+          </label>
+          <button class="ghost" id="comboAdd" type="button">添加子条件</button>
+        </div>
+        <div id="comboList" class="composite-list"></div>
+        <p class="meta">每个子条件独立取数与判定；任一子条件数据不可用或数据时点不可确认，整体记为「已降级且不强行判定」。</p>
+      </div>
+      <button id="create">确认并创建任务</button>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <div><span class="eyebrow">MONITORING TASKS</span><h2>监控任务</h2><p>任务会在服务运行期间按设定间隔检查。归档只收纳、不删除，历史与证据完整保留。</p></div>
+      <div class="task-toolbar">
+        <label>任务状态
+          <select id="taskFilter">
+            <option value="all">全部（含已归档）</option>
+            <option value="active">运行中</option>
+            <option value="paused">已暂停</option>
+            <option value="archived">已归档</option>
+          </select>
+        </label>
+        <button class="ghost" id="refresh">刷新状态</button>
+      </div>
+    </div>
+    <div id="tasks"></div>
+    <div id="taskModal" class="modal hidden">
+      <div class="modal-box">
+        <div class="card-heading"><b>编辑监控任务</b><button class="close ghost" type="button">关闭</button></div>
+        <p class="hint">修改后会生成新版本，下一次检查从新规则开始。</p>
+        <div class="grid">
+          <label>任务名称<input id="editTitle"></label>
+          <label>条件类型
+            <select id="editKind">
+              <option value="price">价格</option>
+              <option value="heat">热度</option>
+              <option value="event">事件</option>
+              <option value="calendar">日历</option>
+              <option value="composite">组合</option>
+            </select>
+          </label>
+          <label id="editSymbolField">证券代码<input id="editSymbol"></label>
+          <label id="editOperatorField">条件<select id="editOperator"></select></label>
+          <label id="editThresholdField">阈值<input id="editThreshold"></label>
+          <label>检查间隔（分钟）<input id="editInterval" type="number" min="1"></label>
+          <label>冷却时间（分钟）<input id="editCooldown" type="number" min="0"></label>
+        </div>
+        <div id="editCompositeEditor" class="composite hidden">
+          <div class="composite-head">
+            <label>组合逻辑
+              <select id="editComboLogic">
+                <option value="AND">同时满足（并且 / AND）</option>
+                <option value="OR">任一满足（或者 / OR）</option>
+              </select>
+            </label>
+            <button class="ghost" id="editComboAdd" type="button">添加子条件</button>
+          </div>
+          <div id="editComboList" class="composite-list"></div>
+        </div>
+        <button id="saveEdit">保存新版本</button>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <div><span class="eyebrow">WHY IT HAPPENED</span><h2>检查记录</h2><p>每条记录都保留判断依据、数据时间和来源。</p></div>
+    </div>
+    <div class="run-toolbar">
+      <label>查看任务<select id="runFilter"><option value="">全部任务</option></select></label>
+      <label>时间区间
+        <select id="runRange">
+          <option value="all">全部</option>
+          <option value="today">今天</option>
+          <option value="24h">最近 24 小时</option>
+          <option value="7d">最近 7 天</option>
+        </select>
+      </label>
+      <label>结果
+        <select id="runStatus">
+          <option value="">全部结果</option>
+          <option value="triggered">已触发</option>
+          <option value="not_triggered">未触发</option>
+          <option value="suppressed">冷却中 / 已去重</option>
+          <option value="skipped">未执行（非交易日）</option>
+          <option value="degraded">已降级 / 数据受限 / 数据冲突 / 检查失败</option>
+        </select>
+      </label>
+      <label>条件类型
+        <select id="runKind">
+          <option value="">全部类型</option>
+          <option value="price">价格</option>
+          <option value="heat">热度</option>
+          <option value="event">事件</option>
+          <option value="calendar">日历</option>
+          <option value="composite">组合</option>
+        </select>
+      </label>
+      <button class="ghost" id="runReset" type="button">重置筛选</button>
+      <button class="ghost" id="runToggleAll" type="button">全部展开</button>
+    </div>
+    <p class="run-count" id="runCount"></p>
+    <div id="runs"></div>
+  </section>
+
+  <details class="guide notify" id="notifyBlock" open>
+    <summary class="guide-title">通知与提醒<span class="guide-tip">触发后在哪里收到提醒</span></summary>
+
+    <p><b>站内检查记录始终保存</b>：无论是否配置外部渠道，每次检查的结论、原因与证据都会留在上面的「检查记录」里，随时可展开审计。下面的渠道只是让提醒更快找到你，属于可选增强，不是必需项。</p>
+
+    <details class="guide-block" open>
+      <summary>① 浏览器桌面通知</summary>
+      <div class="guide-block-body">
+        <p>页面打开时（含后台标签页）条件触发会立刻弹出系统通知，不需要任何第三方账号。</p>
+        <div class="notify-row">
+          <button id="desktopToggle" class="ghost" type="button">开启桌面通知</button>
+          <span id="desktopState" class="meta">正在检测浏览器支持情况…</span>
+        </div>
+        <p class="meta"><b>局限（如实说明）</b>：它走的是浏览器，页面关掉就收不到。要做到无人值守，请用下面的微信推送。</p>
+      </div>
+    </details>
+
+    <details class="guide-block">
+      <summary>② 微信推送（由服务端发出，关掉页面也能收到）</summary>
+      <div class="guide-block-body">
+        <p>服务端在判定为<b>已触发</b>的当刻直接发出消息。冷却中与已去重的记录不会重复推送——那正是去重逻辑存在的意义。</p>
+        <div id="channelList"></div>
+        <p class="meta" id="channelEmpty">还没有配置推送渠道。选择渠道类型、粘贴凭证后点「添加渠道」。</p>
+        <div class="notify-add">
+          <label>渠道类型<select id="channelType"></select></label>
+          <label>凭证 / 地址<input id="channelTarget" placeholder=""></label>
+          <button id="channelAdd" class="ghost" type="button">添加渠道</button>
+        </div>
+        <p class="meta" id="channelHint"></p>
+        <div class="notify-row">
+          <button id="channelTest" class="ghost" type="button">测试全部已启用渠道</button>
+          <span id="channelTestResult" class="meta"></span>
+        </div>
+        <p class="meta">凭证保存在服务端运行状态里，读取接口只返回脱敏形态（如 <code>••••a1b2</code>），原文不会出现在接口响应、日志或仓库中。</p>
+      </div>
+    </details>
+  </details>
+
+  <section class="legend">
+    <b>状态怎么理解？</b>
+    <span><i class="dot green"></i>已触发：条件满足</span>
+    <span><i class="dot gray"></i>未触发：数据正常，条件未满足</span>
+    <span><i class="dot blue"></i>未执行：非交易日跳过，不计为失败</span>
+    <span><i class="dot orange"></i>已降级 / 检查失败：数据不可用，不会假装成未触发</span>
+    <span><i class="dot purple"></i>数据受限：数据时点无法确认，本次不判定</span>
+    <span><i class="dot red"></i>数据存在冲突：多源业务时点不一致，本次不判定</span>
+  </section>
+</main>
+<div id="detailModal" class="modal hidden">
+  <div class="modal-box detail-box">
+    <div class="card-heading"><b>任务详情与版本记录</b><button class="detail-close ghost" type="button">关闭</button></div>
+    <div id="detailContent"></div>
+  </div>
+</div>
+<!-- 脚本必须放在所有 DOM 之后：早于此处的元素在脚本执行时还不存在 -->
+<script src="/app.js?v=__ASSET_V__"></script>
+</body>
+</html>

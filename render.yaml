@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: investment-radar
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_VERSION
+        value: 22.22.0
+      - key: FUYAO_API_KEY
+        sync: false

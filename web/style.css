@@ -1,0 +1,165 @@
+:root{--ink:#17251f;--muted:#708078;--line:#dce5df;--paper:#f7faf7;--green:#1f7655;--mint:#e7f2eb;--orange:#a85b21}*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.6 system-ui,"Microsoft YaHei",sans-serif}main{max-width:1050px;margin:auto;padding:48px 26px 80px}header,.section-head,.task,.run{display:flex;justify-content:space-between;gap:18px;align-items:center}header{align-items:flex-start;margin-bottom:28px}.eyebrow{font-size:11px;letter-spacing:.16em;color:var(--green);font-weight:700}h1{font-size:36px;line-height:1.2;margin:10px 0}h2{margin:4px 0}p,.meta,.hint,#parseNote{color:var(--muted)}.badge,.status{border:1px solid var(--line);border-radius:20px;padding:6px 11px;background:#fff;font-size:12px;white-space:nowrap}.guide{background:#edf6ef;border:1px solid #d9eade;border-radius:14px;padding:18px 20px;margin-bottom:30px}.guide-title{font-weight:700;margin-bottom:12px}.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}.steps div{display:flex;flex-direction:column;gap:3px}.steps span{font-size:13px;color:var(--muted)}.hero{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:54px}label{display:block;font-size:13px;color:var(--muted);margin:10px 0}textarea,input,select{display:block;width:100%;padding:11px;border:1px solid var(--line);border-radius:9px;background:#fff;font:inherit;color:var(--ink)}textarea{height:120px;resize:vertical}.examples{display:flex;gap:7px;align-items:center;margin-top:10px;color:var(--muted);font-size:12px}.examples button{margin:0;padding:5px 9px;background:#fff;color:var(--green);border:1px solid var(--line);font-size:12px;font-weight:500}.actions{display:flex;gap:12px;align-items:center}button{border:0;border-radius:8px;padding:10px 15px;background:var(--green);color:white;font-weight:600;cursor:pointer;margin-top:12px}.ghost{background:white;color:var(--green);border:1px solid var(--line)}.card,.task,.run{border:1px solid var(--line);background:white;border-radius:12px;padding:16px;margin:10px 0}.card-heading{display:flex;justify-content:space-between}.card-heading span{font-size:12px;color:var(--muted)}.grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}.task,.run{align-items:flex-start}.reason{color:var(--muted);font-size:13px}.status.triggered{background:var(--mint);color:var(--green)}.status.error,.status.degraded{background:#fff1e7;color:var(--orange)}.hidden{display:none}.section-head{border-bottom:1px solid var(--line);padding:10px 0}.section-head p{margin:3px 0 0;font-size:13px}.legend{display:flex;gap:18px;flex-wrap:wrap;margin-top:30px;padding:16px;background:#fff;border:1px solid var(--line);border-radius:12px;font-size:13px;color:var(--muted)}.legend b{color:var(--ink)}.dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:5px}.green{background:var(--green)}.gray{background:#87958d}.orange{background:var(--orange)}time{font-size:12px;color:var(--muted)}@media(max-width:700px){main{padding:28px 15px}.hero{grid-template-columns:1fr}.steps{grid-template-columns:1fr;gap:8px}h1{font-size:29px}header{display:block}}.task-actions{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}.task-actions button{margin-top:6px;padding:7px 10px;font-size:12px}.modal{position:fixed;inset:0;background:#17251f55;display:grid;place-items:center;padding:20px}.modal-box{background:#fff;border-radius:16px;padding:22px;max-width:580px;width:100%;box-shadow:0 20px 60px #17251f33;max-height:calc(100vh - 40px);overflow-y:auto}.modal.hidden{display:none}.close{margin:0}.task.off{opacity:.65}.task.off .status{background:#f1f4f2;color:#708078}.health-banner{padding:12px 16px;border-radius:10px;margin:0 0 14px;background:#e9f5ee;color:var(--green);border:1px solid #d3e9dc}.health-banner.warning,.health-banner.error{background:#fff1e7;color:var(--orange);border-color:#f0d8c6}.summary{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-bottom:18px}.summary div{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px}.summary b{font-size:24px;display:block}.summary span{font-size:12px;color:var(--muted)}.detail-box{max-width:760px;max-height:85vh;overflow:auto}.detail-section{padding:14px 0;border-bottom:1px solid var(--line)}.detail-section:last-child{border:0}.fact-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.fact{background:var(--paper);padding:10px;border-radius:8px}.fact span{font-size:11px;color:var(--muted);display:block}.version-row{display:flex;justify-content:space-between;gap:15px;padding:10px 0;border-bottom:1px dashed var(--line);font-size:13px}.raw{font-family:ui-monospace,monospace;font-size:11px;color:var(--muted);word-break:break-all}.run-toolbar{display:flex;justify-content:flex-end}.run-toolbar label{display:flex;align-items:center;gap:8px}.run-toolbar select{width:auto;padding:7px}.detail{margin-top:6px!important}.reason-code{font-family:ui-monospace,monospace;font-size:11px;color:var(--muted);margin-left:7px}@media(max-width:700px){.summary{grid-template-columns:1fr 1fr}.fact-grid{grid-template-columns:1fr}}
+/* 图例圆点颜色（此前未定义，圆点为透明不可见） */
+.dot.green{background:var(--green)}
+.dot.gray{background:#b6c2ba}
+.dot.orange{background:var(--orange)}
+.dot.blue{background:#2f6fb5}
+/* 条件类型标签 */
+.kind-tag{display:inline-block;padding:2px 8px;border-radius:20px;background:var(--mint);color:var(--green);font-size:11px;font-weight:600;margin-right:6px}
+.kind-tag.small{font-size:10px;padding:1px 6px;background:#eef2f8;color:#3c5a86}
+/* 未执行（非交易日跳过）：与"未触发"和"失败"都不同的独立语义 */
+.status.skipped{background:#eef2f8;color:#3c5a86}
+.version-row+.version-row{margin-top:8px}
+.run .reason{margin:4px 0}
+.run .meta+.meta{margin-top:2px}
+
+/* 生成草案后的提示语较长，允许换行并占满剩余宽度，避免挤出输入面板 */
+.actions{flex-wrap:wrap}
+#parseNote{flex:1 1 210px;font-size:13px;line-height:1.5;margin:0}
+#parseNote.error{color:var(--orange)}
+
+/* ---------- 说明板块：整体可折叠 + 三个子块 ---------- */
+.guide>summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:8px}
+.guide>summary::-webkit-details-marker{display:none}
+.guide>summary::marker{content:''}
+.guide>summary::before{content:'▾';color:var(--green);font-size:12px;line-height:1}
+.guide:not([open])>summary::before{content:'▸'}
+.guide:not([open])>summary.guide-title{margin-bottom:0}
+.guide-tip{margin-left:auto;font-weight:400;font-size:12px;color:var(--muted)}
+.guide-block{border:1px solid #d9eade;background:#fff;border-radius:10px;margin-top:10px}
+.guide-block>summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:8px;padding:11px 14px;font-weight:700;font-size:14px}
+.guide-block>summary::-webkit-details-marker{display:none}
+.guide-block>summary::marker{content:''}
+.guide-block>summary::before{content:'▸';color:var(--green);font-size:12px;line-height:1}
+.guide-block[open]>summary::before{content:'▾'}
+.guide-block[open]>summary{border-bottom:1px solid var(--line)}
+.guide-block-body{padding:12px 14px 14px}
+.guide-block-body p{margin:9px 0;font-size:13px}
+.guide-block-body b{color:var(--ink)}
+.guide-block-body code{font-family:ui-monospace,monospace;font-size:11.5px;background:var(--paper);border:1px solid var(--line);border-radius:4px;padding:0 4px;word-break:break-all}
+.guide-list{margin:12px 0 0;padding-left:20px;font-size:13px;color:var(--muted)}
+.guide-list li{margin:5px 0}
+.guide-table{width:100%;border-collapse:collapse;font-size:12.5px;margin:4px 0 10px}
+.guide-table th,.guide-table td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}
+.guide-table th{background:var(--mint);color:var(--green);font-weight:600;white-space:nowrap}
+.guide-table td:first-child{font-weight:600;color:var(--ink);white-space:nowrap}
+.guide-note{background:#fffaf3;border:1px solid #f0d8c6;border-radius:8px;padding:10px 12px;margin-top:12px}
+.guide-note>b{color:var(--orange)}
+.guide-note p{margin:5px 0 0}
+
+/* ---------- 检查记录：筛选栏 + 可折叠记录 ---------- */
+.run-toolbar{display:flex;flex-wrap:wrap;gap:9px 14px;align-items:center;justify-content:flex-start;padding:12px 0 6px}
+.run-toolbar label{display:flex;align-items:center;gap:7px;margin:0;white-space:nowrap}
+.run-toolbar select{width:auto;padding:7px;max-width:190px}
+.run-toolbar button{margin-top:0;padding:7px 12px;font-size:12px}
+.run-count{margin:0 0 4px;font-size:12px;color:var(--muted)}
+.run{display:block;padding:0;overflow:hidden}
+.run-head{cursor:pointer;list-style:none;display:flex;align-items:flex-start;gap:10px;padding:14px 16px}
+.run-head::-webkit-details-marker{display:none}
+.run-head::marker{content:''}
+.run-head:hover{background:#fbfdfc}
+.run-main{display:flex;flex-wrap:wrap;align-items:center;gap:7px;flex:1;min-width:0}
+.run-reason{font-size:13px;color:var(--muted);flex-basis:100%}
+.run-head time{margin-left:auto;white-space:nowrap}
+.caret{width:0;height:0;border-left:5px solid var(--muted);border-top:4px solid transparent;border-bottom:4px solid transparent;margin-top:7px;flex:0 0 auto;transition:transform .15s}
+.run[open] .caret{transform:rotate(90deg)}
+.run-body{padding:12px 16px 14px 31px;border-top:1px dashed var(--line)}
+.run-line{display:flex;gap:10px;font-size:13px;padding:3px 0}
+.run-line>b{flex:0 0 62px;color:var(--ink)}
+.run-line>span{color:var(--muted);word-break:break-word;min-width:0}
+.run-body .raw{display:inline;word-break:break-all}
+@media(max-width:700px){
+.run-toolbar{justify-content:flex-start}
+.run-line{flex-direction:column;gap:2px}
+.run-line>b{flex:none}
+.run-body{padding-left:16px}
+}
+
+/* ---------- 通知与提醒：桌面通知开关 + 微信推送渠道 ---------- */
+.notify{margin-top:30px}
+.notify .guide-block-body p{margin:8px 0}
+.notify-row{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin-top:10px}
+.notify-row button{margin-top:0}
+.notify-add{display:grid;grid-template-columns:minmax(180px,220px) 1fr auto;gap:10px;align-items:end;margin-top:8px}
+.notify-add label{margin:0}
+.notify-add button{margin-top:0;white-space:nowrap}
+.channel{display:flex;align-items:center;gap:9px;border:1px solid var(--line);border-radius:9px;padding:9px 12px;margin:8px 0;background:#fff}
+.channel-main{flex:1;min-width:0}
+.channel-main b{display:block;font-size:13.5px}
+.channel-main .meta{font-size:12px}
+.channel button{margin-top:0;padding:6px 10px;font-size:12px}
+.channel.off{opacity:.55}
+#channelTestResult.ok,#desktopState.on{color:var(--green)}
+#channelTestResult.bad{color:var(--orange)}
+@media(max-width:700px){
+.notify-add{grid-template-columns:1fr}
+.channel{flex-wrap:wrap}
+}
+
+/* ---------- 数据受限：数据时点不可确认，本次不判定 ---------- */
+/* 与"已降级"刻意区分：降级是数据取不到，受限是数据取到了但说不清是哪个时点的 */
+.dot.purple{background:#6b4fa8}
+.status.restricted{background:#f1ecfb;color:#5a4392}
+
+/* ---------- 预测 / 荐股类请求：说明 + 替代写法 ---------- */
+/* 不用报错的红色：这不是用户填错，而是产品边界 */
+#parseNote.refusal{color:#5a4392;flex:1 1 100%;font-size:13px;line-height:1.5}
+#parseNote.refusal .sample-fill{margin:7px 0 0;padding:5px 10px;font-size:12px}
+
+/* ---------- 组合条件：草稿 / 编辑弹窗里的子条件编辑器 ---------- */
+.composite{margin-top:12px;border:1px solid var(--line);border-radius:10px;padding:12px;background:var(--paper)}
+.composite-head{display:flex;flex-wrap:wrap;align-items:flex-end;gap:12px;justify-content:space-between}
+.composite-head label{margin:0}
+.composite-head select{width:auto;min-width:210px}
+.composite-head button{margin-top:0}
+.composite .composite-list{margin-top:10px}
+.cond{display:grid;grid-template-columns:22px 84px 1.1fr 1.3fr 1fr auto;gap:8px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:9px;padding:8px 10px;margin-bottom:8px}
+.cond-idx{font-size:12px;font-weight:700;color:var(--green);text-align:center}
+.cond select,.cond input{margin:0;padding:7px 8px;font-size:13px}
+.cond button{margin-top:0;padding:6px 10px;font-size:12px}
+.cond input:disabled{background:var(--paper);color:var(--muted)}
+
+/* ---------- 组合条件的判定证据：每个子条件单独一行 ---------- */
+.run-body .composite-list{display:flex;flex-direction:column;gap:4px;width:100%}
+.composite-row{display:block;padding:5px 0;border-bottom:1px dashed var(--line);font-size:12.5px;line-height:1.55}
+.composite-row:last-child{border-bottom:0}
+.composite-row>b{color:var(--green);margin-right:3px}
+.part-status{display:inline-block;padding:1px 7px;border-radius:20px;font-size:11px;font-weight:600;white-space:nowrap}
+.part-status.satisfied{background:#e7f2eb;color:var(--green)}
+.part-status.not_satisfied{background:#f0f2f1;color:#5c6b64}
+.part-status.unavailable{background:#fdf1e8;color:var(--orange)}
+.part-status.restricted{background:#f1ecfb;color:#5a4392}
+.part-label{color:var(--ink);margin-right:4px}
+@media(max-width:700px){
+.composite-head{flex-direction:column;align-items:stretch}
+.cond{display:flex;flex-wrap:wrap;gap:6px}
+.cond .c-kind,.cond .c-op{flex:1 1 100px}
+.cond .c-symbol,.cond .c-th{flex:1 1 120px}
+}
+
+/* ---------- 数据冲突：多源业务时点不一致，本次不判定 ---------- */
+/* 与"已降级""数据受限"都不同：降级是取不到，受限是说不清时点，
+   冲突是两份数据都取到了、但彼此矛盾。三种都不能折算成"未触发"。 */
+.dot.red{background:#b4453a}
+.status.conflict{background:#fbeceb;color:#a03a2f}
+.no-decision{color:#a03a2f;font-weight:600}
+
+/* ---------- 任务归档：只收纳、不删除 ---------- */
+.status.archived{background:#eef0ef;color:#5c6b64}
+.task.archived{background:#fbfcfb;border-style:dashed}
+.task.archived b{color:#5c6b64}
+.task-toolbar{display:flex;align-items:center;gap:12px}
+.task-toolbar label{display:flex;align-items:center;gap:7px;margin:0;white-space:nowrap}
+.task-toolbar select{width:auto;padding:7px;max-width:190px}
+.task-toolbar button{margin-top:0;padding:7px 12px;font-size:12px}
+
+/* ---------- 任务详情：运行状态（恢复叙事） ---------- */
+.recovery-list{display:flex;flex-direction:column;gap:4px;margin-top:10px}
+.recovery-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:6px 0;border-bottom:1px dashed var(--line);font-size:12.5px}
+.recovery-row:last-child{border-bottom:0}
+.recovery-row>b{font-weight:600;color:var(--ink);white-space:nowrap}
+.part-status.ok{background:#e7f2eb;color:var(--green)}
+
+@media(max-width:700px){
+.task-toolbar{flex-wrap:wrap;justify-content:flex-start}
+}
